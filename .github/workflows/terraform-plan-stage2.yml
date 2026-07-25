@@ -1,11 +1,13 @@
-name: Terraform Apply
+name: Terraform Plan Stage 2
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-
-  terraform-apply:
+  terraform-plan:
 
     runs-on: ubuntu-latest
 
@@ -28,20 +30,10 @@ jobs:
         working-directory: ./Infrastructure-terra
         run: terraform init
 
-      - name: Terraform Apply ACM (stage 1)
+      - name: Terraform Plan full (stage 2)
         working-directory: ./Infrastructure-terra
         run: |
-          terraform apply \
-          -target=module.acm \
-          --auto-approve \
-          -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" 
-          
-
-      - name: Terraform Apply full (stage 2)
-        working-directory: ./Infrastructure-terra
-        run: |
-          terraform apply \
-          --auto-approve \
+          terraform plan \
           -var="image_id=592587463331.dkr.ecr.eu-north-1.amazonaws.com/code-server-terra:v1" \
           -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" \
           -var="code_server_password=${{ secrets.CODE_SERVER_PASSWORD }}"
