@@ -70,9 +70,9 @@ GitHub Actions automates deployment:
 
 -
 
-### How To Reproduce
+# How To Reproduce
 
-# Requirements
+## Requirements
 
 Install:
 
@@ -81,7 +81,7 @@ Install:
 - AWS CLI
 - Cloudflare account with purchased domain
 
-# Steps
+## Steps
 
 Clone the repository:
 
@@ -237,7 +237,7 @@ Check:
 - DNS record points to the ALB.
 - Cloudflare proxy settings.
 
-# Possible Improvements
+## Possible Improvements
 
 Future improvements that could make the deployment more production-ready:
 
@@ -246,7 +246,7 @@ Future improvements that could make the deployment more production-ready:
 - Add a custom domain health check. 
 - Improve container security with stricter IAM permissions.
 
-# Author
+## Author
 
 Mohamed Mahmoud Yusuf
 
