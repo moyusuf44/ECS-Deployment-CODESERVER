@@ -1,0 +1,26 @@
+# Git
+.git
+.gitignore
+
+# Terraform files
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+dev.tfvars
+
+# Terraform plans
+terraform-plan-stage1.yml
+terraform-plan-stage2.yml
+
+# Documentation
+README.md
+
+# Screenshots
+*.png
+
+# CI/CD files
+.github/
+
+
+

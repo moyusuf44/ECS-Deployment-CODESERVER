@@ -1,6 +1,7 @@
+# Terraform files
+
+dev.tfvars
 **/.terraform/*
 *.tfstate
 *.tfstate.*
-crash.log
-my-app
-dev.tfvars
+
