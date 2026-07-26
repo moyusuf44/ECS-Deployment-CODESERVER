@@ -67,8 +67,30 @@ GitHub Actions automates deployment:
 # Application Running Through Domain
 
 ![Application Running](image-2.png)
+---
 
--
+## Security Group Design
+
+ECS Security groups are managed through the VPC Terraform module and attached to the required AWS resources.
+
+
+### Application Load Balancer Security Group
+
+Created within the ALB module and allows inbound web traffic:
+
+- HTTP (port 80)
+- HTTPS (port 443)
+
+The ALB receives user traffic and forwards requests to the ECS service.
+
+### ECS Service Security Group
+
+Created within the VPC module and attached to the ECS Fargate service.
+
+The ECS security group only allows inbound traffic from the ALB security group, preventing direct access to the container.
+
+
+---
 
 # How To Reproduce
 
