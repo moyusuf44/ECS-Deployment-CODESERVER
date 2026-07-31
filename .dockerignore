@@ -1,6 +1,6 @@
 # Git
-.git
 .gitignore
+.github/
 
 # Terraform files
 *.tfstate
@@ -18,9 +18,5 @@ README.md
 
 # Screenshots
 *.png
-
-# CI/CD files
-.github/
-
 
 
