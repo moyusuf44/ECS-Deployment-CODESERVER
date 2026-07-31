@@ -1,4 +1,4 @@
-name: Terraform Plan Stage 2 FUll
+name: Terraform Plan Stage 2 FULL
 
 on:
   pull_request:
