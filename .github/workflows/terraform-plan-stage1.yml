@@ -1,4 +1,4 @@
-name: Terraform Plan Stage 1
+name: Terraform Plan Stage 1 ACM Cert
 
 on:
   pull_request:
