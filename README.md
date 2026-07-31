@@ -60,6 +60,19 @@ GitHub Actions automates deployment:
 - Runs Terraform
 - Deploys infrastructure changes
 
+## Terraform Backend Setup
+
+This project uses a remote Terraform backend to store state securely and prevent concurrent Terraform operations.
+
+The backend infrastructure consists of:
+
+- **Amazon S3** - Stores the Terraform state file remotely.
+- **Amazon DynamoDB** - Provides state locking to prevent multiple Terraform operations from running at the same time.
+
+The DynamoDB Table should not be destroyed.
+Apply only needed once. 
+
+
 # Successful Deployment
 
 ![Successful Deployment](image-3.png)
