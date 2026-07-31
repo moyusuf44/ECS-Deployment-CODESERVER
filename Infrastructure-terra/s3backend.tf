@@ -3,7 +3,7 @@ terraform {
     bucket         = "moyusuf-terraform-state"
     key            = "code-server-project/terraform.tfstate"
     region         = "eu-north-1"
-    dynamodb_table = "terraform-locks"
+    dynamodb_table = "terraform-codeserver-state-lock"
     encrypt        = true
   }
 }
