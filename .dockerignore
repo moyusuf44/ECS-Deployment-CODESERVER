@@ -8,6 +8,8 @@
 .terraform/
 .terraform.lock.hcl
 dev.tfvars
+terraform-state-lock/
+Infra/
 
 # Terraform plans
 terraform-plan-stage1.yml

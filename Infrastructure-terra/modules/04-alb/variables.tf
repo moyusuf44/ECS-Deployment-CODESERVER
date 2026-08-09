@@ -1,4 +1,3 @@
-
 variable "certificate_arn" {
   type = string
 }
@@ -8,7 +7,7 @@ variable "health_check_path" {
 }
 
 variable "subnets" {
-  type        = list(string)
+  type = list(string)
 }
 
 variable "vpc_id" {
