@@ -1,0 +1,41 @@
+name: Terraform Apply DynamoDB Table
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  terraform-apply:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure Credentials for AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: ./terraform-state-lock
+        run: terraform init
+
+      - name: Terraform Apply DynamoDB Table
+        working-directory: ./terraform-state-lock
+        run: terraform apply --auto-aprove
+
+      - name: Terraform Apply Create Repo
+        working-directory: ./Infra
+        run: |
+          terraform apply \
+          -target=module.ecr \
+          --auto-approve \
+          
