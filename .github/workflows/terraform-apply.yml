@@ -44,5 +44,5 @@ jobs:
           terraform apply \
           --auto-approve \
           -var="image_id=592587463331.dkr.ecr.eu-north-1.amazonaws.com/code-server-terra:v1" \
-          -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-          -var="code_server_password=${{ secrets.CODE_SERVER_PASSWORD }}"
+          -var="code_server_password=${{ secrets.CODE_SERVER_PASSWORD }}" \
+          -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" 

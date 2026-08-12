@@ -3,6 +3,11 @@ module "vpc" {
  
 }
 
+module "ecr" {
+  source = "./modules/02-ecr"
+
+}
+
 module "ecs" {
     source = "./modules/03-ecs"
 
@@ -47,6 +52,7 @@ module "cloudflare" {
     alb_dns_name = module.alb.alb_dns_name
    
     zone_name = var.zone_name
+    zone_id   = var.zone_id
 }
 
 resource "aws_acm_certificate_validation" "this" {

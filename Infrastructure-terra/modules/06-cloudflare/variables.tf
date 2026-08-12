@@ -14,3 +14,7 @@ variable "domain_validation_options" {
 variable "alb_dns_name" {
   type = string 
 }
+
+variable "zone_id" {
+  type = string
+}

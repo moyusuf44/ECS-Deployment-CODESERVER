@@ -38,4 +38,6 @@ jobs:
           terraform apply \
           -target=module.ecr \
           --auto-approve \
-          
+          -var="cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -var="code_server_password=${{ secrets.CODE_SERVER_PASSWORD }}" \
+          -var="image_id=bootstrap"

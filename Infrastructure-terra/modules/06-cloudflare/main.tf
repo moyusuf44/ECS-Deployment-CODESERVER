@@ -11,7 +11,7 @@ resource "cloudflare_dns_record" "acm_validation" {
   idx => dvo
 }
 
-  zone_id = data.cloudflare_zone.this.id
+  zone_id = var.zone_id
 
   name    = each.value.resource_record_name
   type    = each.value.resource_record_type
