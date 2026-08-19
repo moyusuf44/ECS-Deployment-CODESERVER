@@ -1,4 +1,4 @@
-name: Terraform Apply DynamoDB Table
+name: AWS Repo Apply
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
         working-directory: ./terraform-state-lock
         run: terraform init
 
-      - name: Terraform Apply DynamoDB Table
+      - name: Terraform Apply 
         working-directory: ./terraform-state-lock
         run: terraform apply --auto-aprove
 
