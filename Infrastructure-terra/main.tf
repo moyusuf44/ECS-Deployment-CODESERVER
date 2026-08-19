@@ -15,7 +15,7 @@ module "ecs" {
     vpc_id = module.vpc.vpc_id
     subnet_ids = module.vpc.public_subnets
     subnets = module.vpc.public_subnets
-    security_group = module.vpc.ecs_security_group_id
+    security_group = [module.vpc.ecs_security_group_id]
     alb_security_group_id = module.alb.alb_security_group_id
    
     cluster_name = var.cluster_name
