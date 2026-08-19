@@ -31,7 +31,7 @@ module "alb" {
   
     vpc_id = module.vpc.vpc_id
     subnets = module.vpc.public_subnets
-    certificate_arn = module.acm.certificate_arn
+    certificate_arn = aws_acm_certificate_validation.this.certificate_arn
     
     health_check_path = var.health_check_path
 }
