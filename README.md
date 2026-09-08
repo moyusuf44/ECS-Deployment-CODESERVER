@@ -2,19 +2,19 @@
 
 > A cloud-hosted development environment built to learn what it takes to take a containerised application from a local machine to a secure, automated AWS deployment.
 
-![Architecture Diagram](screenshots/architecture.png)
+## Table of Contents
 
 ## Table of Contents
 
-* [Why I Built This](#why-i-built-this)
-* [What I Built](#what-i-built)
-* [Architecture](#architecture)
-* [Tech Stack](#tech-stack)
-* [Deployment](#deployment)
-* [CI/CD](#cicd)
-* [Security](#security)
-* [What I Learned](#what-i-learned)
-* [Future Improvements](#future-improvements)
+- [Why I Built This](#why-i-built-this)
+- [What I Built](#what-i-built)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Deployment](#deployment)
+- [CI/CD](#cicd)
+- [Security](#security)
+- [What I Learned](#what-i-learned)
+- [Future Improvements](#future-improvements)
 
 ---
 
