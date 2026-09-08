@@ -4,8 +4,6 @@
 
 ## Table of Contents
 
-## Table of Contents
-
 - [Why I Built This](#why-i-built-this)
 - [What I Built](#what-i-built)
 - [Architecture](#architecture)
