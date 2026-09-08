@@ -115,7 +115,7 @@ Terraform
 
 ## Deployment
 
-### Prerequisites
+### Requirements
 
 * AWS account
 * Cloudflare account and domain
