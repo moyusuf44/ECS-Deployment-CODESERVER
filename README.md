@@ -1,134 +1,136 @@
-# Code Server AWS ECS Deployment Project
+# Code Server on AWS ECS Fargate
 
-# Overview
+> A cloud-hosted development environment built to learn what it takes to take a containerised application from a local machine to a secure, automated AWS deployment.
 
-This project deploys a self-hosted VS Code environment using **code-server** on AWS ECS Fargate.
+![Architecture Diagram](screenshots/architecture.png)
 
-The infrastructure is managed using **Terraform** and includes:
+## Table of Contents
 
-- AWS VPC with public subnets
-- ECS Fargate cluster running code-server
-- Amazon ECR for Docker image storage
-- Application Load Balancer for traffic routing
-- ACM certificate for HTTPS
-- Cloudflare DNS management
-- GitHub Actions CI/CD pipeline
-- Terraform remote state stored in Amazon S3
-
-The application is accessible through a custom domain with HTTPS enabled.
-
----
-
-# Architecture
-
-![AWS Architecture Diagram](screenshots/architecture.png)
-
-# The deployment flow:
-
-User > HTTPS > Cloudflare DNS > Application Load Balancer > AWS ECS Fargate > Code Server Container > ECR Docker Image
+* [Why I Built This](#why-i-built-this)
+* [What I Built](#what-i-built)
+* [Architecture](#architecture)
+* [Tech Stack](#tech-stack)
+* [Deployment](#deployment)
+* [CI/CD](#cicd)
+* [Security](#security)
+* [What I Learned](#what-i-learned)
+* [Future Improvements](#future-improvements)
 
 ---
 
-## Technologies Used
+## Why I Built This
 
-- AWS ECS Fargate
-- AWS ECR
-- AWS ALB
-- AWS ACM
-- Terraform
-- Docker
-- Cloudflare DNS
-- GitHub Actions
-- Linux
+This was one of my first projects while learning **Cloud and DevOps engineering**.
 
-## Deployment Process
+I didn't want to stop at running Docker containers locally. I wanted to understand what happens when you take a containerised application and make it accessible as a real service.
 
-1. Docker image is built for code-server.
-2. Image is pushed to Amazon ECR.
-3. Terraform creates AWS infrastructure intwo steps firstly making the ACM Certificate then the rest of the      components using Infrastructure as Code.
-4. ECS launches the container using the ECR image.
-5. ACM provides HTTPS certificates.
-6. Cloudflare manages DNS records.
-7. Application becomes available through the custom domain "tm.moyusufs-code-server.com" and "moyusufs-code-server.com"
+I chose **code-server** because it turns a browser into a development environment. That gave me something practical to deploy while learning:
 
-# CI/CD Pipeline
+* Linux and Docker
+* AWS networking
+* Container orchestration
+* Infrastructure as Code
+* HTTPS and DNS
+* CI/CD
 
-GitHub Actions automates deployment:
+The goal wasn't to build code-server itself.
 
-- Builds Docker image
-- Pushes image to ECR
-- Runs Terraform
-- Deploys infrastructure changes
-
-## Terraform Backend Setup
-
-This project uses a remote Terraform backend to store state securely and prevent concurrent Terraform operations.
-
-The backend infrastructure consists of:
-
-- **Amazon S3** - Stores the Terraform state file remotely.
-- **Amazon DynamoDB** - Provides state locking to prevent multiple Terraform operations from running at the same time.
-
-The DynamoDB Table should not be destroyed.
-Apply only needed once. 
-
-
-# Successful Deployment
-
-![Successful Deployment](image-3.png)
-
-# Application Running Through Domain
-
-![Application Running](image-2.png)
----
-
-## Security Group Design
-
-ECS Security groups are managed through the VPC Terraform module and attached to the required AWS resources.
-
-
-### Application Load Balancer Security Group
-
-Created within the ALB module and allows inbound web traffic:
-
-- HTTP (port 80)
-- HTTPS (port 443)
-
-The ALB receives user traffic and forwards requests to the ECS service.
-
-### ECS Service Security Group
-
-Created within the VPC module and attached to the ECS Fargate service.
-
-The ECS security group only allows inbound traffic from the ALB security group, preventing direct access to the container.
-
+**The goal was to learn how to build and operate the infrastructure around an application.**
 
 ---
 
-# How To Reproduce
+## What I Built
 
-## Requirements
+I deployed code-server as a Docker container running on **AWS ECS Fargate**.
 
-Install:
+The infrastructure is provisioned with **Terraform**, with **GitHub Actions** handling the deployment workflow.
 
-- Terraform
-- Docker
-- AWS CLI
-- Cloudflare account with purchased domain
+The deployment includes:
 
-## Steps
+* AWS VPC
+* ECS Fargate
+* Amazon ECR
+* Application Load Balancer
+* AWS Certificate Manager
+* Cloudflare DNS
+* Terraform remote state
+* GitHub Actions CI/CD
+
+The result is a browser-accessible development environment available through HTTPS.
+
+---
+
+## Architecture
+
+```text
+User
+  |
+  | HTTPS
+  v
+Cloudflare
+  |
+  v
+Application Load Balancer
+  |
+  v
+ECS Fargate
+  |
+  v
+code-server Container
+  ^
+  |
+Amazon ECR
+```
+
+Terraform manages the infrastructure:
+
+```text
+Terraform
+   |
+   +-- VPC
+   +-- ECR
+   +-- ECS
+   +-- ALB
+   +-- ACM
+   +-- Cloudflare
+```
+
+---
+
+## Tech Stack
+
+| Technology                | Purpose                 |
+| ------------------------- | ----------------------- |
+| AWS ECS Fargate           | Container hosting       |
+| Amazon ECR                | Container image storage |
+| Application Load Balancer | Traffic routing         |
+| AWS ACM                   | HTTPS certificate       |
+| Amazon VPC                | Networking              |
+| Terraform                 | Infrastructure as Code  |
+| Docker                    | Containerisation        |
+| Cloudflare                | DNS                     |
+| GitHub Actions            | CI/CD                   |
+| Amazon S3                 | Terraform remote state  |
+| Linux                     | Development environment |
+
+---
+
+## Deployment
+
+### Prerequisites
+
+* AWS account
+* Cloudflare account and domain
+* Docker
+* Terraform
+* AWS CLI
+
+### Deploy
 
 Clone the repository:
 
 ```bash
 git clone <repository-url>
-```
-pull it
-cd Infrastructure-terra
-
-Navigate to the Terraform directory:
-
-```bash
 cd Infrastructure-terra
 ```
 
@@ -138,162 +140,129 @@ Initialise Terraform:
 terraform init
 ```
 
-Validate the Terraform configuration:
+Validate the configuration:
 
 ```bash
 terraform validate
 ```
 
-Preview the infrastructure changes:
+Review the changes:
 
 ```bash
 terraform plan
 ```
 
-Deploy the infrastructure:
+Deploy:
 
 ```bash
-terraform apply -auto-approve
+terraform apply
 ```
 
-Terraform will create:
-
-- VPC and networking
-- ECS Fargate cluster
-- ECR repository
-- Application Load Balancer
-- ACM SSL certificate
-- Cloudflare DNS records
-
-After deployment, access the application using:
-
-```
-https://tm.your-domain.com
-```
-
-
-Login using the password configured in `code_server_password`.
-
-
-# CI/CD Deployment
-
-Destroy what you have just created using:
-
-```bash
-terraform destroy
-```
-
-The project uses GitHub Actions to automate:
-
-- Builds Docker image
-- Pushes image to ECR
-- Runs Terraform
-- Deploys infrastructure changes
-
-Required GitHub Secrets:
-
-```
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY_ID
-AWS_REGION
-CLOUDFLARE_API_TOKEN
-CODE_SERVER_PASSWORD
-```
-
-CICD info:
-workflows can be run in github using workflow dispatch
-
-The application runs using:
-
-- Docker container running code-server
-- Amazon ECS Fargate for container hosting
-- Application Load Balancer for traffic routing
-- ACM for HTTPS certificates
-- Cloudflare for DNS management
-
-
-# Troubleshooting
-
-## Common Issues
-If the plan ever gets stuck in github actions not all variables have been provided in the code.
-
-### Terraform Provider Errors
-
-If Terraform providers fail to initialise, update the providers:
-
-```bash
-terraform init -upgrade
-```
-
-### ACM Certificate Validation
-
-The ACM certificate uses DNS validation through Cloudflare.
-
-If the certificate remains in `PENDING_VALIDATION`:
-
-1. Check that the Cloudflare API token has the required DNS permissions.
-2. Confirm the validation records exist:
-
-```bash
-terraform state list | grep cloudflare
-```
-
-3. Wait for AWS ACM to verify the DNS records.
-
-
-### ECS Container Health Check
-
-If the ECS task is unhealthy:
-
-Check:
-
-- Container port matches the target group port.
-- Security groups allow traffic.
-- The ECS task is running.
-
-Useful AWS CLI command:
-
-```bash
-aws ecs describe-services \
---cluster code-server-cluster-terra \
---services code-server-service-terra
-```
+Once the ECS service is running and the ALB reports healthy targets, the code-server environment can be accessed through the configured HTTPS domain.
 
 ---
 
-### Cloudflare 522 Error
+## CI/CD
 
-A Cloudflare 522 usually means Cloudflare cannot reach the AWS Load Balancer.
+GitHub Actions automates the deployment process.
 
-Check:
+```text
+GitHub
+   |
+   v
+GitHub Actions
+   |
+   +--> Build Docker image
+   |
+   +--> Push image to ECR
+   |
+   +--> Terraform plan
+   |
+   +--> Terraform apply
+   |
+   v
+AWS
+```
 
-- ALB is running.
-- ECS target is healthy.
-- DNS record points to the ALB.
-- Cloudflare proxy settings.
+The workflow can also be triggered manually using **workflow dispatch**.
 
-## Possible Improvements
+Sensitive values such as AWS credentials, Cloudflare credentials and the code-server password are stored as GitHub Secrets.
 
-Future improvements that could make the deployment more production-ready:
+---
 
-- Add ECS auto scaling. 
-- Add monitoring and alerts using CloudWatch. 
-- Add a custom domain health check. 
-- Improve container security with stricter IAM permissions.
+## Security
+
+The Application Load Balancer accepts public web traffic on:
+
+* `80` — HTTP
+* `443` — HTTPS
+
+The ECS service does **not** allow unrestricted public access.
+
+Instead, the ECS security group only accepts traffic from the Application Load Balancer.
+
+```text
+Internet
+   |
+   v
+ALB
+   |
+   | Allowed
+   v
+ECS
+```
+
+Terraform state is stored remotely in Amazon S3 to avoid relying on a local state file.
+
+---
+
+## What I Learned
+
+This project changed how I approached cloud engineering.
+
+I started with the idea of **"how do I deploy this?"**
+
+It quickly became:
+
+**"What has to exist for this application to actually work?"**
+
+That meant dealing with networking, security groups, container ports, health checks, DNS, certificates, IAM, Terraform state and deployment failures.
+
+Some of the most useful lessons came from things going wrong — particularly debugging ECS health checks, networking issues and container deployment failures.
+
+This project was less about code-server and more about learning how the pieces of a cloud environment fit together.
+
+---
+
+## Future Improvements
+
+If I continued developing this project, I would add:
+
+* ECS auto scaling
+* CloudWatch monitoring and alerts
+* Container vulnerability scanning
+* More restrictive IAM permissions
+* Automated health checks
+* Improved secret management
+
+---
+
+## Screenshots
+
+### Successful Deployment
+
+![Successful Deployment](image-3.png)
+
+### Code Server Running
+
+![Code Server](image-2.png)
+
+---
 
 ## Author
 
-Mohamed Mahmoud Yusuf
+**Mohamed Mahmoud Yusuf**
 
-Cloud / DevOps Project
+Cloud / DevOps Engineering
 
-Skills demonstrated:
-
-- Linux
-- Bash
-- Docker
-- AWS
-- Terraform
-- CI/CD
-- Cloud Networking
-- S3 Buckets
+This project represents an early step in my journey from learning individual technologies to understanding how they work together to build useful systems.
